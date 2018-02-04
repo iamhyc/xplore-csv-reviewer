@@ -2,6 +2,12 @@
 
 provide item/list colorful review for IEEE Xplore search results
 
+### Sample
+
+![Sample](./Sample.gif)
+
+(black background for better experience, `cmder` for Windows is recommended)
+
 ### Instructions
 
 1. python 2.7.x and run `setup.py` in this repo (Windows only, linux user can diy)
