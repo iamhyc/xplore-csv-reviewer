@@ -37,25 +37,26 @@ def list_view(key):
 def item_view(key):
 	global prev_pos, curr_pos, f, r, num_arr, jumped_list
 	prev_pos = curr_pos
+	jumps_len = len(jumped_list)
 
 	if key==keyboard.Key.left:
 		curr_pos = (curr_pos-1) if curr_pos>0 else 0
 		pass
 	elif key==keyboard.Key.right:
-		curr_pos = (curr_pos+1) if curr_pos<len(jumped_list)-2 else len(jumped_list)-1
+		curr_pos = (curr_pos+1) if curr_pos<jumps_len-2 else jumps_len-1
 		pass
 	elif key==keyboard.Key.page_up:
 		curr_pos = (curr_pos-10) if curr_pos>10 else 0
 		pass
 	elif key==keyboard.Key.page_down:
-		curr_pos = (curr_pos+10) if curr_pos<len(jumped_list)-11 else len(jumped_list)-1
+		curr_pos = (curr_pos+10) if curr_pos<jumps_len-11 else jumps_len-1
 		pass
 	
 	if prev_pos!=curr_pos:
 		m_cls('(LeftArrow and RightArrow for navigation; PageUp and PageDown for 10 items)')
 		f.seek(jumped_list[curr_pos])
 		t = r.next()
-		print('\t\t[Item-%d]\t\t'%curr_pos)
+		print('\t\t\t\t[Item-%d/%d]'%(curr_pos, jumps_len))
 		for i,x in enumerate(num_arr):
 			cprint(t[x], COLRS[i%COLRS_NUM])
 			pass
@@ -65,7 +66,7 @@ def item_view(key):
 
 def main(options, args):
 	global f, r, prev_pos, curr_pos, num_arr
-	curr_pos = 0
+	curr_pos = options.curr_pos + 1
 	## setup csv file
 	csvfile = './export.csv'
 	if len(args) and path.isfile(args[0]) and ('csv' in path.basename(args[0])):
@@ -80,7 +81,7 @@ def main(options, args):
 	## set display columns
 	if options.numbers>0:
 		num_arr = toBitArray(options.numbers)
-		num_arr = [i for (i,x) in enumerate(num_arr) if x==1]
+		num_arr = [i for (i,x) in enumerate(reversed(num_arr)) if x==1]
 		pass
 	else:
 		title = ['%d %s'%(i, x) for (i,x) in enumerate(titles)]
@@ -135,6 +136,11 @@ if __name__ == '__main__':
 		type="int",
 		dest="numbers",
 		default=-1,
+		help="the long number for column display")
+	parser.add_option("-p", "--position",
+		type="int",
+		dest="curr_pos",
+		default=0,
 		help="the long number for column display")
 
 	try:

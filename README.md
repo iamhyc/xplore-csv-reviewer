@@ -19,4 +19,7 @@ provide item/list colorful review for IEEE Xplore search results
 ### TODO
 
 * list view mode
-* xplore search integrated
+* align text print with getConsoleWidth
+* reduce keyboard hook range and function
+* xplore search integrated, lite database for parsing storage
+* (optional) record display sequence order
