@@ -1,5 +1,6 @@
 
 import csv
+import sys
 from os import path, system
 from termcolor import colored, cprint
 from optparse import OptionParser
@@ -56,11 +57,13 @@ def item_view(key):
 		m_cls('(LeftArrow and RightArrow for navigation; PageUp and PageDown for 10 items)')
 		f.seek(jumped_list[curr_pos])
 		t = r.next()
-		print('\t\t\t\t[Item-%d/%d]'%(curr_pos, jumps_len))
+		txt = ['\t\t\t\t[Item-%d/%d]'%(curr_pos, jumps_len)]
 		for i,x in enumerate(num_arr):
-			cprint(t[x], COLRS[i%COLRS_NUM])
+			txt.append(colored(t[x], COLRS[i%COLRS_NUM]))
 			pass
-		print('> '),
+		txt.append('> ')
+		sys.stdout.write('\n'.join(txt))
+		sys.stdout.flush()
 		pass
 	pass
 
