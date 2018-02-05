@@ -35,8 +35,9 @@ def list_view(key):
 	pass
 
 def item_view(key):
-	global curr_pos, f, r, num_arr, jumped_list
-	m_cls('(LeftArrow and RightArrow for navigation; PageUp and PageDown for 10 items)')
+	global prev_pos, curr_pos, f, r, num_arr, jumped_list
+	prev_pos = curr_pos
+
 	if key==keyboard.Key.left:
 		curr_pos = (curr_pos-1) if curr_pos>0 else 0
 		pass
@@ -50,17 +51,20 @@ def item_view(key):
 		curr_pos = (curr_pos+10) if curr_pos<len(jumped_list)-11 else len(jumped_list)-1
 		pass
 	
-	f.seek(jumped_list[curr_pos])
-	t = r.next()
-	print('\t\t[Item-%d]\t\t'%curr_pos)
-	for i,x in enumerate(num_arr):
-		cprint(t[x], COLRS[i%COLRS_NUM])
+	if prev_pos!=curr_pos:
+		m_cls('(LeftArrow and RightArrow for navigation; PageUp and PageDown for 10 items)')
+		f.seek(jumped_list[curr_pos])
+		t = r.next()
+		print('\t\t[Item-%d]\t\t'%curr_pos)
+		for i,x in enumerate(num_arr):
+			cprint(t[x], COLRS[i%COLRS_NUM])
+			pass
+		print('> '),
 		pass
-	print('> '),
 	pass
 
 def main(options, args):
-	global f, r, curr_pos, num_arr
+	global f, r, prev_pos, curr_pos, num_arr
 	curr_pos = 0
 	## setup csv file
 	csvfile = './export.csv'
