@@ -2,6 +2,7 @@
 import csv
 import sys
 from os import path, system
+from time import sleep
 from termcolor import colored, cprint
 from optparse import OptionParser
 from pynput import keyboard
@@ -76,7 +77,7 @@ def main(options, args):
 		csvfile = args[0]
 		pass
 
-	f = open(csvfile, 'r')
+	f = open(csvfile, 'rt', encoding='utf-8')
 	r = csv.reader(iter(f.readline, ''), dialect='excel')
 	
 	titles = next(r)
@@ -108,8 +109,12 @@ def main(options, args):
 		try:
 			print('preloading...')
 			jumped_list.append(f.tell())
-			while next(r)[0]!='': jumped_list.append(f.tell())
-		except Exception as e: pass
+			while next(r)[0]!='':
+				jumped_list.append(f.tell())
+		except Exception as e:
+			# cprint('Exception Caught! %d pcs obtained now.'%(len(jumped_list)), 'red')
+			# sleep(3)
+			pass
 		finally:
 			r = csv.reader(iter(f.readline, ''), dialect='excel')
 			f.seek(jumped_list[0])
@@ -150,9 +155,8 @@ if __name__ == '__main__':
 		(options, args) = parser.parse_args()
 		main(options, args)
 	except Exception as e:
-		# cprint(e, 'red')
-		raise e
+		cprint(e, 'red')
+		# raise e
 	finally:
-		# m_exit()
-		pass
+		m_exit()
 	
