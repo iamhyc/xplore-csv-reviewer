@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python3
 import csv
 import sys
 from os import path, system
@@ -56,7 +56,7 @@ def item_view(key):
 	if prev_pos!=curr_pos:
 		m_cls('(LeftArrow and RightArrow for navigation; PageUp and PageDown for 10 items)')
 		f.seek(jumped_list[curr_pos])
-		t = r.next()
+		t = next(r)
 		txt = ['\t\t\t\t[Item-%d/%d]'%(curr_pos, jumps_len)]
 		for i,x in enumerate(num_arr):
 			txt.append(colored(t[x], COLRS[i%COLRS_NUM]))
@@ -76,10 +76,10 @@ def main(options, args):
 		csvfile = args[0]
 		pass
 
-	f = open(csvfile, 'rb')
+	f = open(csvfile, 'r')
 	r = csv.reader(iter(f.readline, ''), dialect='excel')
 	
-	titles = r.next()
+	titles = next(r)
 
 	## set display columns
 	if options.numbers>0:
@@ -89,10 +89,10 @@ def main(options, args):
 	else:
 		title = ['%d %s'%(i, x) for (i,x) in enumerate(titles)]
 		cprint('\t'.join(title), 'magenta')
-		num_arr = raw_input('Please select columns (split by SPACE):').split(' ')
+		num_arr = input('Please select columns (split by SPACE):').split(' ')
 		num_arr = [int(x) for x in num_arr]
 		print('Your long number: %r'%fromNumArray(num_arr))
-		raw_input('press ENTER to continue...')
+		input('press ENTER to continue...')
 		pass
 
 	## setup event monitor
@@ -108,7 +108,7 @@ def main(options, args):
 		try:
 			print('preloading...')
 			jumped_list.append(f.tell())
-			while r.next()[0]!='': jumped_list.append(f.tell())
+			while next(r)[0]!='': jumped_list.append(f.tell())
 		except Exception as e: pass
 		finally:
 			r = csv.reader(iter(f.readline, ''), dialect='excel')
@@ -150,7 +150,9 @@ if __name__ == '__main__':
 		(options, args) = parser.parse_args()
 		main(options, args)
 	except Exception as e:
-		cprint(e, 'red')
+		# cprint(e, 'red')
+		raise e
 	finally:
-		m_exit()
+		# m_exit()
+		pass
 	
